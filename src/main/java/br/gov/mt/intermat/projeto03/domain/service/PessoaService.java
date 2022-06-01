@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class CrudPessoaService{
+public class PessoaService{
     PessoaRepository pessoaRepository;
     public Pessoa buscar (long pessoaId){
         return pessoaRepository.findById(pessoaId)

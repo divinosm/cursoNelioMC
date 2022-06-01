@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.gov.mt.intermat.projeto03.domain.model.Pessoa;
 import br.gov.mt.intermat.projeto03.domain.repository.PessoaRepository;
-import br.gov.mt.intermat.projeto03.domain.service.CrudPessoaService;
+import br.gov.mt.intermat.projeto03.domain.service.PessoaService;
 import lombok.AllArgsConstructor;
 
 // cria os construtures automaticamente - allargsconstructor
@@ -32,7 +32,7 @@ public class PessoaController {
    //mesmo resultado com a geração de constructor, conforme a seguire
    //
     private PessoaRepository pessoaRepository;
-    private CrudPessoaService crudPessoaService; 
+    private PessoaService pessoaService; 
 /*
     public PessoaController(PessoaRepository pessoaRepository) {
         super();
@@ -59,7 +59,7 @@ public class PessoaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Pessoa adicionar (@Valid @RequestBody Pessoa pessoa){
-        return crudPessoaService.salvar(pessoa);
+        return pessoaService.salvar(pessoa);
     }
     @PutMapping("/{pessoaId}")
     public ResponseEntity<Pessoa> atualizar ( @PathVariable Long pessoaId, 
@@ -68,7 +68,7 @@ public class PessoaController {
                 return ResponseEntity.notFound().build();
             }else {
                 pessoa.setId(pessoaId);
-                pessoa = crudPessoaService.salvar(pessoa);
+                pessoa = pessoaService.salvar(pessoa);
                 return ResponseEntity.ok(pessoa);
             }
 
@@ -78,7 +78,7 @@ public class PessoaController {
         if(!pessoaRepository.existsById(pessoaId)){
             return ResponseEntity.notFound().build();
         }else {
-            crudPessoaService.excluir(pessoaId);
+            pessoaService.excluir(pessoaId);
             return ResponseEntity.noContent().build();
         }
     }
