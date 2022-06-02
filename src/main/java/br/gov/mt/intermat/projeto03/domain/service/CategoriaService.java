@@ -1,5 +1,7 @@
 package br.gov.mt.intermat.projeto03.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,10 +13,12 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class CategoriaService{
-    CategoriaRepository categoriaRepository;
+    private CategoriaRepository categoriaRepository;
     public Categoria buscar (long categoriaId){
-        return categoriaRepository.findById(categoriaId)
-                          .orElseThrow(()-> new NegocioException("categoria não enccontrado"));
+        Optional <Categoria> obj = categoriaRepository.findById(categoriaId);
+        return obj.orElse(null);
+       // return categoriaRepository.findById(categoriaId)
+        //                  .orElseThrow(()-> new NegocioException("categoria não enccontrado"));
     }
 
     @Transactional

@@ -50,10 +50,13 @@ public class CategoriaController {
     }
     @GetMapping("/{categoriaId}")
     public ResponseEntity<Categoria> buscar ( @PathVariable Long categoriaId){ //binding = vincular com o path
- 
-        return categoriaRepository.findById(categoriaId)
-               .map(categoria->ResponseEntity.ok(categoria))
-               .orElse(ResponseEntity.notFound().build());
+        Categoria obj = categoriaService.buscar(categoriaId);
+        return ResponseEntity.ok().body(obj);
+
+
+     //   return categoriaRepository.findById(categoriaId)
+     //          .map(categoria->ResponseEntity.ok(categoria))
+     //          .orElse(ResponseEntity.notFound().build());
   }
   //  vincular o parãmetro do método ao corpo da requisição (vide postman)
     @PostMapping
