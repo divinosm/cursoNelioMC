@@ -44,10 +44,12 @@ public class CategoriaController {
 
     @GetMapping 
     public List<Categoria> listar (){
-          return  categoriaRepository.findAll();
+
+          return  categoriaService.listarTudo();
          // return categoriaRepository.findByNome("maria soares");
           // return categoriaRepository.findByNomeContaining("taques");
     }
+
     @GetMapping("/{categoriaId}")
     public ResponseEntity<Categoria> buscar ( @PathVariable Long categoriaId){ //binding = vincular com o path
         Categoria obj = categoriaService.buscar(categoriaId);

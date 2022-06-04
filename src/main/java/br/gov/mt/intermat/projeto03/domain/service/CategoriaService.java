@@ -1,5 +1,6 @@
 package br.gov.mt.intermat.projeto03.domain.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -14,12 +15,20 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CategoriaService{
     private CategoriaRepository categoriaRepository;
+    
     public Categoria buscar (long categoriaId){
         Optional <Categoria> obj = categoriaRepository.findById(categoriaId);
         return obj.orElse(null);
        // return categoriaRepository.findById(categoriaId)
         //                  .orElseThrow(()-> new NegocioException("categoria não enccontrado"));
-    }
+    }    
+    
+    public List<Categoria> listarTudo (){
+        
+        return  categoriaRepository.findAll();
+       // return categoriaRepository.findByNome("maria soares");
+        // return categoriaRepository.findByNomeContaining("taques");
+  }
 
     @Transactional
     public Categoria salvar(Categoria categoria){
