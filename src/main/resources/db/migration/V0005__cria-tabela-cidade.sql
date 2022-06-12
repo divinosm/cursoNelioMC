@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS cidade (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(60) NOT NULL,
+  estado_id BIGINT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_estado
+    FOREIGN KEY (estado_id)
+    REFERENCES estado (id)
+)

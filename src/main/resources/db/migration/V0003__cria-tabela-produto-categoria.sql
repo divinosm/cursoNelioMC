@@ -1,4 +1,4 @@
-create table produto_categoria(
+CREATE TABLE IF NOT EXISTS produto_categoria(
       produto_id bigint not null,
       categoria_id bigint not null
 );
