@@ -1,4 +1,5 @@
 package br.gov.mt.intermat.projeto03.domain.model;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,10 +9,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,8 +21,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true) //apenas propriedades implicitas
-@Table (name = "categoria")
-public class Categoria implements Serializable {
+@Table (name = "produto")
+public class Produto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @EqualsAndHashCode.Include
@@ -28,12 +30,13 @@ public class Categoria implements Serializable {
     private Long id;
     @Column(nullable = false)
     private String nome;
-    @JsonIgnore
-    //@JsonManagedReference // no lado que vc quer que venham os objetos referenciados
+    private double preco;
+    // @JsonBackReference // do outro lado já foi passado os campos do relacionamento
+    @ManyToMany (fetch = FetchType.EAGER)
+    @JoinTable(name = "produto_categoria",
+            joinColumns = @JoinColumn (name = "produto_id"),
+            inverseJoinColumns = @JoinColumn (name="categoria_id"))
+    private List <Categoria> categorias;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categorias")
-    private List<Produto> produtos;
-    // private List<Produto> produtos = new ArrayList<>();
- 
-   
+    //private List <Categoria> categorias = new ArrayList<>();
 }

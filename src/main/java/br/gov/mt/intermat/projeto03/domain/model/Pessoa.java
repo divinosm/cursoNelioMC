@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 @Table (name = "pessoa")
 public class Pessoa {
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)

@@ -44,17 +44,16 @@ public class PessoaController {
 
     @GetMapping 
     public List<Pessoa> listar (){
-          return  pessoaRepository.findAll();
+        return  pessoaRepository.findAll();
          // return pessoaRepository.findByNome("maria soares");
           // return pessoaRepository.findByNomeContaining("taques");
     }
     @GetMapping("/{pessoaId}")
     public ResponseEntity<Pessoa> buscar ( @PathVariable Long pessoaId){ //binding = vincular com o path
- 
         return pessoaRepository.findById(pessoaId)
-               .map(pessoa->ResponseEntity.ok(pessoa))
-               .orElse(ResponseEntity.notFound().build());
-  }
+            .map(pessoa->ResponseEntity.ok(pessoa))
+            .orElse(ResponseEntity.notFound().build());
+    }
   //  vincular o parãmetro do método ao corpo da requisição (vide postman)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -63,7 +62,7 @@ public class PessoaController {
     }
     @PutMapping("/{pessoaId}")
     public ResponseEntity<Pessoa> atualizar ( @PathVariable Long pessoaId, 
-                 @Valid @RequestBody Pessoa pessoa){
+            @Valid @RequestBody Pessoa pessoa){
             if(!pessoaRepository.existsById(pessoaId)){
                 return ResponseEntity.notFound().build();
             }else {

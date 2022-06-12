@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.gov.mt.intermat.projeto03.domain.exception.NegocioException;
 import br.gov.mt.intermat.projeto03.domain.model.Categoria;
 import br.gov.mt.intermat.projeto03.domain.repository.CategoriaRepository;
+import br.gov.mt.intermat.projeto03.domain.service.exceptions.ObjetcNotFoundException;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -17,10 +18,8 @@ public class CategoriaService{
     private CategoriaRepository categoriaRepository;
     
     public Categoria buscar (long categoriaId){
-        Optional <Categoria> obj = categoriaRepository.findById(categoriaId);
-        return obj.orElse(null);
-       // return categoriaRepository.findById(categoriaId)
-        //                  .orElseThrow(()-> new NegocioException("categoria não enccontrado"));
+        Optional <Categoria> categoria = categoriaRepository.findById(categoriaId);
+        return categoria.orElseThrow(() -> new ObjetcNotFoundException("Objeto não encontrado! Id: " + categoriaId + ", Tipo: " + Categoria.class.getName()));
     }    
     
     public List<Categoria> listarTudo (){
