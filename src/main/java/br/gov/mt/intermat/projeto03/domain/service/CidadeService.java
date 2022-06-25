@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.gov.mt.intermat.projeto03.domain.exception.NegocioException;
 import br.gov.mt.intermat.projeto03.domain.model.Cidade;
 import br.gov.mt.intermat.projeto03.domain.repository.CidadeRepository;
 import br.gov.mt.intermat.projeto03.domain.service.exceptions.ObjetcNotFoundException;
@@ -36,7 +35,7 @@ public class CidadeService{
                               .stream()
                               .anyMatch(cidadeExistente -> !cidadeExistente.equals(cidade));
         if (nomeExiste) {
-            throw new NegocioException("jah existe um cidade cadastrado com este nome");
+            throw new ObjetcNotFoundException("jah existe um cidade cadastrado com este nome! Nome: " + cidade.getNome() + ", Tipo: " + Cidade.class.getName());
         }                 
 
         return cidadeRepository.save(cidade);

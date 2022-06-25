@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.gov.mt.intermat.projeto03.domain.exception.NegocioException;
 import br.gov.mt.intermat.projeto03.domain.model.Produto;
 import br.gov.mt.intermat.projeto03.domain.repository.ProdutoRepository;
+import br.gov.mt.intermat.projeto03.domain.service.exceptions.ObjetcNotFoundException;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -17,8 +17,9 @@ public class ProdutoService{
     private ProdutoRepository produtoRepository;
     
     public Produto buscar (long produtoId){
-        Optional <Produto> obj = produtoRepository.findById(produtoId);
-        return obj.orElse(null);
+        Optional <Produto> produto = produtoRepository.findById(produtoId);
+        return produto.orElseThrow(() -> new ObjetcNotFoundException("Objeto não encontrado! Id: " + produtoId + ", Tipo: " + Produto.class.getName()));
+
        // return produtoRepository.findById(produtoId)
         //                  .orElseThrow(()-> new NegocioException("produto não enccontrado"));
     }    
@@ -37,7 +38,7 @@ public class ProdutoService{
                               .stream()
                               .anyMatch(produtoExistente -> !produtoExistente.equals(produto));
         if (nomeExiste) {
-            throw new NegocioException("jah existe um produto cadastrado com este nome");
+            throw new ObjetcNotFoundException("jah existe um produto cadastrado com este nome! Nome: " + produto.getNome() + ", Tipo: " + Produto.class.getName());
         }                 
 
         return produtoRepository.save(produto);

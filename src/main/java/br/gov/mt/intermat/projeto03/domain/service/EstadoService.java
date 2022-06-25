@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.gov.mt.intermat.projeto03.domain.exception.NegocioException;
 import br.gov.mt.intermat.projeto03.domain.model.Estado;
 import br.gov.mt.intermat.projeto03.domain.repository.EstadoRepository;
 import br.gov.mt.intermat.projeto03.domain.service.exceptions.ObjetcNotFoundException;
@@ -36,7 +35,8 @@ public class EstadoService{
                               .stream()
                               .anyMatch(estadoExistente -> !estadoExistente.equals(estado));
         if (nomeExiste) {
-            throw new NegocioException("jah existe um estado cadastrado com este nome");
+            throw new ObjetcNotFoundException("jah existe um estado cadastrado com este nome! Nome: " + estado.getNome() + ", Tipo: " + Estado.class.getName());
+            
         }                 
 
         return estadoRepository.save(estado);

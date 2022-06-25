@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.gov.mt.intermat.projeto03.domain.exception.NegocioException;
 import br.gov.mt.intermat.projeto03.domain.model.Categoria;
 import br.gov.mt.intermat.projeto03.domain.repository.CategoriaRepository;
 import br.gov.mt.intermat.projeto03.domain.service.exceptions.ObjetcNotFoundException;
@@ -36,7 +35,7 @@ public class CategoriaService{
                               .stream()
                               .anyMatch(categoriaExistente -> !categoriaExistente.equals(categoria));
         if (nomeExiste) {
-            throw new NegocioException("jah existe um categoria cadastrado com este nome");
+            throw new ObjetcNotFoundException("jah existe um categoria cadastrado com este nome! nome: " + categoria.getNome() + ", Tipo: " + Categoria.class.getName());
         }                 
 
         return categoriaRepository.save(categoria);
