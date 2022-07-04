@@ -1,6 +1,7 @@
 package br.gov.mt.intermat.projeto03.domain.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -36,7 +37,14 @@ public class Produto implements Serializable {
     @JoinTable(name = "produto_categoria",
             joinColumns = @JoinColumn (name = "produto_id"),
             inverseJoinColumns = @JoinColumn (name="categoria_id"))
-    private List <Categoria> categorias;
+    private List <Categoria> categorias = new ArrayList<>();
+
+    
+    public Produto(Long id, String nome, double preco) {
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
+    }
 
     //private List <Categoria> categorias = new ArrayList<>();
 }

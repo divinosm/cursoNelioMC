@@ -1,6 +1,7 @@
 package br.gov.mt.intermat.projeto03.domain.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,12 +43,16 @@ public class Cliente implements Serializable {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
-    private List<Endereco> enderecos;
+    private List<Endereco> enderecos = new ArrayList<>();
 
     // set não aceita repetição
     @ElementCollection
     @CollectionTable(name="telefone")
     private Set<String> telefones = new HashSet<>(); 
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
+    private List<Pedido> pedidos = new ArrayList<>();
 
     // tratar enum
     public  TipoCliente getTipoCliente(){
@@ -67,8 +72,10 @@ public class Cliente implements Serializable {
     //     this.enderecos = enderecos;
     //     this.telefones = telefones;
     // }
+    // depois tentar tirar as listas dos construtores
+    //
     public Cliente(Long id, String nome, String email, String cpfoucnpj, TipoCliente tipoCliente, List<Endereco> enderecos,
-        Set<String> telefones) {
+        Set<String> telefones, List<Pedido> pedidos) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -76,6 +83,7 @@ public class Cliente implements Serializable {
         this.tipoClienteInt = tipoCliente.getCodigo();
         this.enderecos = enderecos;
         this.telefones = telefones;
+        this.pedidos = pedidos;
     }
 
     public Cliente(Long id, String nome, String email, String cpfoucnpj, TipoCliente tipoCliente){
@@ -85,6 +93,7 @@ public class Cliente implements Serializable {
           this.cpfoucnpj = cpfoucnpj;
           this.tipoClienteInt = tipoCliente.getCodigo();
       }
+      
     public Cliente() {
 
     }

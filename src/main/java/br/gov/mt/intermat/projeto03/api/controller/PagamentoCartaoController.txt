@@ -1,0 +1,91 @@
+package br.gov.mt.intermat.projeto03.api.controller;
+
+import java.util.List;
+import javax.validation.Valid;
+
+// import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.gov.mt.intermat.projeto03.domain.model.PagamentoCartao;
+import br.gov.mt.intermat.projeto03.domain.repository.PagamentoCartaoRepository;
+import br.gov.mt.intermat.projeto03.domain.service.PagamentoCartaoService;
+import lombok.AllArgsConstructor;
+
+// cria os construtures automaticamente - allargsconstructor
+@AllArgsConstructor
+@RestController
+@RequestMapping("/pagamentoCartaos") //desta forma não necessito repetir no codigo
+public class PagamentoCartaoController {
+
+   // @Autowired     
+   //caso não queira injetar, retira o autowired
+   //mesmo resultado com a geração de constructor, conforme a seguire
+   //
+    private PagamentoCartaoRepository pagamentoCartaoRepository;
+    private PagamentoCartaoService pagamentoCartaoService; 
+/*
+    public PagamentoCartaoController(PagamentoCartaoRepository pagamentoCartaoRepository) {
+        super();
+        this.pagamentoCartaoRepository = pagamentoCartaoRepository;
+    }
+    O construtor acima será criado com a anotação @allargsconstructor acima
+**/
+
+
+    @GetMapping 
+    public List<PagamentoCartao> listar (){
+
+          return  pagamentoCartaoService.listarTudo();
+         // return pagamentoCartaoRepository.findByNome("maria soares");
+          // return pagamentoCartaoRepository.findByNomeContaining("taques");
+    }
+
+    @GetMapping("/{pagamentoCartaoId}")
+    public ResponseEntity<PagamentoCartao> buscar ( @PathVariable Long pagamentoCartaoId){ //binding = vincular com o path
+        PagamentoCartao obj = pagamentoCartaoService.buscar(pagamentoCartaoId);
+        return ResponseEntity.ok().body(obj);
+
+
+     //   return pagamentoCartaoRepository.findById(pagamentoCartaoId)
+     //          .map(pagamentoCartao->ResponseEntity.ok(pagamentoCartao))
+     //          .orElse(ResponseEntity.notFound().build());
+  }
+  //  vincular o parãmetro do método ao corpo da requisição (vide postman)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PagamentoCartao adicionar (@Valid @RequestBody PagamentoCartao pagamentoCartao){
+        return pagamentoCartaoService.salvar(pagamentoCartao);
+    }
+    @PutMapping("/{pagamentoCartaoId}")
+    public ResponseEntity<PagamentoCartao> atualizar ( @PathVariable Long pagamentoCartaoId, 
+                 @Valid @RequestBody PagamentoCartao pagamentoCartao){
+            if(!pagamentoCartaoRepository.existsById(pagamentoCartaoId)){
+                return ResponseEntity.notFound().build();
+            }else {
+                pagamentoCartao.setId(pagamentoCartaoId);
+                pagamentoCartao = pagamentoCartaoService.salvar(pagamentoCartao);
+                return ResponseEntity.ok(pagamentoCartao);
+            }
+
+    }
+    @DeleteMapping("/{pagamentoCartaoId}")
+    public ResponseEntity<Void> remover (@PathVariable Long pagamentoCartaoId){
+        if(!pagamentoCartaoRepository.existsById(pagamentoCartaoId)){
+            return ResponseEntity.notFound().build();
+        }else {
+            pagamentoCartaoService.excluir(pagamentoCartaoId);
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+}

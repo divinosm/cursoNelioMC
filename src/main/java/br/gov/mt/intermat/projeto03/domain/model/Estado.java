@@ -1,6 +1,7 @@
 package br.gov.mt.intermat.projeto03.domain.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -29,7 +30,7 @@ public class Estado implements Serializable {
     private String nome;
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "estado")
-    private List<Cidade> cidades;
+    private List<Cidade> cidades = new ArrayList<>() ;
 
     public Estado(Long id, String nome) {
         this.id = id;

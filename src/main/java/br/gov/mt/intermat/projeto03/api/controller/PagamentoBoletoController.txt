@@ -1,0 +1,91 @@
+package br.gov.mt.intermat.projeto03.api.controller;
+
+import java.util.List;
+import javax.validation.Valid;
+
+// import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.gov.mt.intermat.projeto03.domain.model.PagamentoBoleto;
+import br.gov.mt.intermat.projeto03.domain.repository.PagamentoBoletoRepository;
+import br.gov.mt.intermat.projeto03.domain.service.PagamentoBoletoService;
+import lombok.AllArgsConstructor;
+
+// cria os construtures automaticamente - allargsconstructor
+@AllArgsConstructor
+@RestController
+@RequestMapping("/pagamentoBoletos") //desta forma não necessito repetir no codigo
+public class PagamentoBoletoController {
+
+   // @Autowired     
+   //caso não queira injetar, retira o autowired
+   //mesmo resultado com a geração de constructor, conforme a seguire
+   //
+    private PagamentoBoletoRepository pagamentoBoletoRepository;
+    private PagamentoBoletoService pagamentoBoletoService; 
+/*
+    public PagamentoBoletoController(PagamentoBoletoRepository pagamentoBoletoRepository) {
+        super();
+        this.pagamentoBoletoRepository = pagamentoBoletoRepository;
+    }
+    O construtor acima será criado com a anotação @allargsconstructor acima
+**/
+
+
+    @GetMapping 
+    public List<PagamentoBoleto> listar (){
+
+          return  pagamentoBoletoService.listarTudo();
+         // return pagamentoBoletoRepository.findByNome("maria soares");
+          // return pagamentoBoletoRepository.findByNomeContaining("taques");
+    }
+
+    @GetMapping("/{pagamentoBoletoId}")
+    public ResponseEntity<PagamentoBoleto> buscar ( @PathVariable Long pagamentoBoletoId){ //binding = vincular com o path
+        PagamentoBoleto obj = pagamentoBoletoService.buscar(pagamentoBoletoId);
+        return ResponseEntity.ok().body(obj);
+
+
+     //   return pagamentoBoletoRepository.findById(pagamentoBoletoId)
+     //          .map(pagamentoBoleto->ResponseEntity.ok(pagamentoBoleto))
+     //          .orElse(ResponseEntity.notFound().build());
+  }
+  //  vincular o parãmetro do método ao corpo da requisição (vide postman)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PagamentoBoleto adicionar (@Valid @RequestBody PagamentoBoleto pagamentoBoleto){
+        return pagamentoBoletoService.salvar(pagamentoBoleto);
+    }
+    @PutMapping("/{pagamentoBoletoId}")
+    public ResponseEntity<PagamentoBoleto> atualizar ( @PathVariable Long pagamentoBoletoId, 
+                 @Valid @RequestBody PagamentoBoleto pagamentoBoleto){
+            if(!pagamentoBoletoRepository.existsById(pagamentoBoletoId)){
+                return ResponseEntity.notFound().build();
+            }else {
+                pagamentoBoleto.setId(pagamentoBoletoId);
+                pagamentoBoleto = pagamentoBoletoService.salvar(pagamentoBoleto);
+                return ResponseEntity.ok(pagamentoBoleto);
+            }
+
+    }
+    @DeleteMapping("/{pagamentoBoletoId}")
+    public ResponseEntity<Void> remover (@PathVariable Long pagamentoBoletoId){
+        if(!pagamentoBoletoRepository.existsById(pagamentoBoletoId)){
+            return ResponseEntity.notFound().build();
+        }else {
+            pagamentoBoletoService.excluir(pagamentoBoletoId);
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+}

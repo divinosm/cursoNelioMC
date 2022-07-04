@@ -1,0 +1,5 @@
+entrar no diretorio que será enviado
+git status
+git add .
+git commit -m "tabelas cliente, endereco e telefone criados"
+git push

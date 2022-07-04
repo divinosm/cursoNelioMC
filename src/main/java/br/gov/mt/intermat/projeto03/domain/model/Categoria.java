@@ -1,5 +1,6 @@
 package br.gov.mt.intermat.projeto03.domain.model;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -32,8 +33,16 @@ public class Categoria implements Serializable {
     //@JsonManagedReference // no lado que vc quer que venham os objetos referenciados
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categorias")
-    private List<Produto> produtos;
+    private List<Produto> produtos = new ArrayList<>();
     // private List<Produto> produtos = new ArrayList<>();
+    
+    public Categoria(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+    public Categoria() {
+  
+    }
  
    
 }
