@@ -15,6 +15,7 @@ import br.gov.mt.intermat.projeto03.domain.model.Cidade;
 import br.gov.mt.intermat.projeto03.domain.model.Cliente;
 import br.gov.mt.intermat.projeto03.domain.model.Endereco;
 import br.gov.mt.intermat.projeto03.domain.model.Estado;
+import br.gov.mt.intermat.projeto03.domain.model.ItemPedido;
 import br.gov.mt.intermat.projeto03.domain.model.Pagamento;
 import br.gov.mt.intermat.projeto03.domain.model.PagamentoBoleto;
 import br.gov.mt.intermat.projeto03.domain.model.PagamentoCartao;
@@ -25,6 +26,7 @@ import br.gov.mt.intermat.projeto03.domain.repository.CidadeRepository;
 import br.gov.mt.intermat.projeto03.domain.repository.ClienteRepository;
 import br.gov.mt.intermat.projeto03.domain.repository.EnderecoRepository;
 import br.gov.mt.intermat.projeto03.domain.repository.EstadoRepository;
+import br.gov.mt.intermat.projeto03.domain.repository.ItemPedidoRepository;
 import br.gov.mt.intermat.projeto03.domain.repository.PagamentoRepository;
 import br.gov.mt.intermat.projeto03.domain.repository.PedidoRepository;
 import br.gov.mt.intermat.projeto03.domain.repository.ProdutoRepository;
@@ -48,6 +50,8 @@ public class Projeto03Application implements CommandLineRunner {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Projeto03Application.class, args);
@@ -110,6 +114,21 @@ public class Projeto03Application implements CommandLineRunner {
 
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00,2,80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2,100.00,1,800.00);
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped1.getItens().addAll(Arrays.asList(ip3));
+		
+				
+		itemPedidoRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
+
 	}
 
 }
