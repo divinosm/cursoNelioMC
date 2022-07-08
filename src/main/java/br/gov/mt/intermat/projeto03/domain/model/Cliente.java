@@ -16,8 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.gov.mt.intermat.projeto03.domain.enums.TipoCliente;
 import lombok.Data;
@@ -41,8 +40,6 @@ public class Cliente implements Serializable {
     private int tipoClienteInt;
     //private TipoCliente tipoCliente;
 
-    //@JsonIgnore
-    @JsonManagedReference
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos = new ArrayList<>();
 
@@ -51,8 +48,7 @@ public class Cliente implements Serializable {
     @CollectionTable(name="telefone")
     private Set<String> telefones = new HashSet<>(); 
 
-    //@JsonIgnore
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
 
@@ -64,30 +60,7 @@ public class Cliente implements Serializable {
         this.tipoClienteInt = tipoCliente.getCodigo();
     }
 
-    // public Cliente(Long id, String nome, String email, String cpfoucnpj, TipoCliente tipoCliente,
-    //                List<Endereco> enderecos, Set<String> telefones) {
-    //     this.id = id;
-    //     this.nome = nome;
-    //     this.email = email;
-    //     this.cpfoucnpj = cpfoucnpj;
-    //     this.tipoCliente = tipoCliente;
-    //     this.enderecos = enderecos;
-    //     this.telefones = telefones;
-    // }
-    // depois tentar tirar as listas dos construtores
-    //
-    // public Cliente(Long id, String nome, String email, String cpfoucnpj, 
-    //               TipoCliente tipoCliente, List<Endereco> enderecos,
-    //     Set<String> telefones, List<Pedido> pedidos) {
-    //     this.id = id;
-    //     this.nome = nome;
-    //     this.email = email;
-    //     this.cpfoucnpj = cpfoucnpj;
-    //     this.tipoClienteInt = tipoCliente.getCodigo();
-    //     this.enderecos = enderecos;
-    //     this.telefones = telefones;
-    //     this.pedidos = pedidos;
-    // }
+     
 
     public Cliente(Long id, String nome, String email, String cpfoucnpj, TipoCliente tipoCliente){
           this.id = id;

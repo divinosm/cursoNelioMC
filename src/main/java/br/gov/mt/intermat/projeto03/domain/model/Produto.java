@@ -18,7 +18,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -38,7 +37,7 @@ public class Produto implements Serializable {
     private String nome;
     private double preco;
     // @JsonBackReference // do outro lado já foi passado os campos do relacionamento
-    @JsonBackReference 
+    @JsonIgnore
     @ManyToMany (fetch = FetchType.LAZY)
     @JoinTable(name = "produto_categoria",
             joinColumns = @JoinColumn (name = "produto_id"),
