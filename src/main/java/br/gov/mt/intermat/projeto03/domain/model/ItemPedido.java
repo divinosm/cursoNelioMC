@@ -5,6 +5,8 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,6 +16,7 @@ import lombok.EqualsAndHashCode;
 @Table (name = "itemPedido")
 public class ItemPedido implements Serializable {
     private static final long serialVersionUID = 1L;
+    @JsonIgnore
     @EmbeddedId
     @EqualsAndHashCode.Include
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +30,7 @@ public class ItemPedido implements Serializable {
 
     // @ManyToMany(fetch = FetchType.LAZY, mappedBy = "itens")
     // private List<Produto> produtos = new ArrayList<>();
-
+    @JsonIgnore
     public Pedido getPedido(){
         return id.getPedido();
     }

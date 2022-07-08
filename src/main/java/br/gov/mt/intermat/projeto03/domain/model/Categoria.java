@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,9 +29,8 @@ public class Categoria implements Serializable {
     private Long id;
     @Column(nullable = false)
     private String nome;
-    @JsonIgnore
     //@JsonManagedReference // no lado que vc quer que venham os objetos referenciados
-
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categorias")
     private List<Produto> produtos = new ArrayList<>();
     // private List<Produto> produtos = new ArrayList<>();

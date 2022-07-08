@@ -10,6 +10,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.gov.mt.intermat.projeto03.domain.enums.EstadoPagamento;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,7 +38,7 @@ public abstract class Pagamento implements Serializable {
    //
     private Long id;
     private Integer estadoPagamentoInt;
-
+    @JsonBackReference
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId

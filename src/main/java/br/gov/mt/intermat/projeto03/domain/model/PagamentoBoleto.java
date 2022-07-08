@@ -4,7 +4,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.gov.mt.intermat.projeto03.domain.enums.EstadoPagamento;
 import lombok.Data;
@@ -16,9 +16,9 @@ import lombok.EqualsAndHashCode;
 @Table (name = "pagamentoBoleto")
 public class PagamentoBoleto extends Pagamento   {
     private static final long serialVersionUID = 1L;
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataVencimento;
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataPagamento;
     
     

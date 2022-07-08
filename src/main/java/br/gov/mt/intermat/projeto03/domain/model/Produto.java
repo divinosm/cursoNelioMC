@@ -18,6 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,15 +38,18 @@ public class Produto implements Serializable {
     private String nome;
     private double preco;
     // @JsonBackReference // do outro lado já foi passado os campos do relacionamento
-    @ManyToMany (fetch = FetchType.EAGER)
+    @JsonBackReference 
+    @ManyToMany (fetch = FetchType.LAZY)
     @JoinTable(name = "produto_categoria",
             joinColumns = @JoinColumn (name = "produto_id"),
             inverseJoinColumns = @JoinColumn (name="categoria_id"))
     private List <Categoria> categorias = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id.produto")
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.produto")
     private Set<ItemPedido> itens = new HashSet<>();
 
+    @JsonIgnore
     public List<Pedido> getPedidos(){
         List<Pedido> lista = new ArrayList<>();
         for(ItemPedido x : itens){
@@ -59,6 +64,7 @@ public class Produto implements Serializable {
         this.nome = nome;
         this.preco = preco;
     }
-
+    public Produto() {
+    }
     //private List <Categoria> categorias = new ArrayList<>();
 }
