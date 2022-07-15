@@ -38,6 +38,13 @@ public class ClienteService{
 
         return clienteRepository.save(cliente);
     }
+
+    @Transactional
+    public Cliente atualizar(Cliente obj){
+        buscar(obj.getId());
+        return clienteRepository.save(obj);
+    }
+
     @Transactional
     public void excluir (Long clienteId){
     clienteRepository.deleteById(clienteId);

@@ -40,6 +40,13 @@ public class PedidoService{
 
         return pedidoRepository.save(pedido);
     }
+
+    @Transactional
+    public Pedido atualizar(Pedido obj){
+        buscar(obj.getId());
+        return pedidoRepository.save(obj);
+    }
+
     @Transactional
     public void excluir (Long pedidoId){
     pedidoRepository.deleteById(pedidoId);
