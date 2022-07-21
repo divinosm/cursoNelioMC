@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
 
@@ -26,12 +29,7 @@ public class CategoriaService{
         return obj.orElseThrow(() -> new ObjetcNotFoundException("Objeto não encontrado! Id: " + categoriaId + ", Tipo: " + Categoria.class.getName()));
     }    
     
-    public List<Categoria> listarTudo (){
-        
-        return  categoriaRepository.findAll();
-       // return categoriaRepository.findByNome("maria soares");
-        // return categoriaRepository.findByNomeContaining("taques");
-  }
+
 
     //@Transactional
     public Categoria salvar(Categoria obj){
@@ -55,5 +53,16 @@ public class CategoriaService{
             catch (DataIntegrityViolationException e) {
                 throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos");
             }
+        }
+        public List<Categoria> listarTudo (){
+        
+            return  categoriaRepository.findAll();
+           // return categoriaRepository.findByNome("maria soares");
+            // return categoriaRepository.findByNomeContaining("taques");
+        } 
+        
+       public Page <Categoria> montaPagina(Integer pagina, Integer linhasPorPagina, String ordenadoPor, String direcao){
+            PageRequest pageRequest = PageRequest.of(pagina, linhasPorPagina,Direction.valueOf(direcao), ordenadoPor);
+            return  categoriaRepository.findAll(pageRequest);
         }
 }

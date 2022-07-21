@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -39,11 +41,25 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService; 
 
+    //DTO - DATA TRANSFER OBJECT
     @GetMapping 
     public ResponseEntity<List<CategoriaDTO>> listar (){
         List<Categoria> lista = categoriaService.listarTudo();
         List<CategoriaDTO> listaDTO = lista.stream()
              .map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listaDTO);
+         // return categoriaRepository.findByNome("maria soares");
+         // return categoriaRepository.findByNomeContaining("taques");
+    }
+
+    @GetMapping ("/page")
+    public ResponseEntity<Page<CategoriaDTO>> listarPagina (
+             @RequestParam(value = "pagina", defaultValue = "0")   Integer pagina, 
+             @RequestParam(value = "linhasPorPagina", defaultValue = "24")   Integer linhasPorPagina, 
+             @RequestParam(value = "ordenadoPor", defaultValue = "nome") String ordenadoPor, 
+             @RequestParam(value = "direcao", defaultValue = "ASC") String direcao ){ //ASC OU DESC
+        Page<Categoria> lista = categoriaService.montaPagina(pagina, linhasPorPagina, ordenadoPor, direcao);
+        Page<CategoriaDTO> listaDTO = lista.map(obj -> new CategoriaDTO(obj));
         return ResponseEntity.ok().body(listaDTO);
          // return categoriaRepository.findByNome("maria soares");
          // return categoriaRepository.findByNomeContaining("taques");
