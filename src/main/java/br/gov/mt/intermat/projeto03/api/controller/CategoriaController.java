@@ -2,6 +2,7 @@ package br.gov.mt.intermat.projeto03.api.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.gov.mt.intermat.projeto03.domain.dto.CategoriaDTO;
 import br.gov.mt.intermat.projeto03.domain.model.Categoria;
 import br.gov.mt.intermat.projeto03.domain.service.CategoriaService;
 import lombok.AllArgsConstructor;
@@ -37,13 +39,14 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService; 
 
-
     @GetMapping 
-    public List<Categoria> listar (){
-
-          return  categoriaService.listarTudo();
+    public ResponseEntity<List<CategoriaDTO>> listar (){
+        List<Categoria> lista = categoriaService.listarTudo();
+        List<CategoriaDTO> listaDTO = lista.stream()
+             .map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listaDTO);
          // return categoriaRepository.findByNome("maria soares");
-          // return categoriaRepository.findByNomeContaining("taques");
+         // return categoriaRepository.findByNomeContaining("taques");
     }
 
 
