@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
 
+import br.gov.mt.intermat.projeto03.domain.dto.CategoriaDto;
 import br.gov.mt.intermat.projeto03.domain.model.Categoria;
 import br.gov.mt.intermat.projeto03.domain.repository.CategoriaRepository;
 import br.gov.mt.intermat.projeto03.domain.service.exceptions.DataIntegrityException;
@@ -60,9 +61,13 @@ public class CategoriaService{
            // return categoriaRepository.findByNome("maria soares");
             // return categoriaRepository.findByNomeContaining("taques");
         } 
-        
+
        public Page <Categoria> montaPagina(Integer pagina, Integer linhasPorPagina, String ordenadoPor, String direcao){
             PageRequest pageRequest = PageRequest.of(pagina, linhasPorPagina,Direction.valueOf(direcao), ordenadoPor);
             return  categoriaRepository.findAll(pageRequest);
+        }
+
+        public Categoria fromDto(CategoriaDto objDto){
+            return new Categoria(objDto.getId(), objDto.getNome());
         }
 }

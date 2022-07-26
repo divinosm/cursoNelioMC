@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.gov.mt.intermat.projeto03.domain.dto.CategoriaDTO;
+import br.gov.mt.intermat.projeto03.domain.dto.CategoriaDto;
 import br.gov.mt.intermat.projeto03.domain.model.Categoria;
 import br.gov.mt.intermat.projeto03.domain.service.CategoriaService;
 import lombok.AllArgsConstructor;
@@ -43,23 +43,23 @@ public class CategoriaController {
 
     //DTO - DATA TRANSFER OBJECT
     @GetMapping 
-    public ResponseEntity<List<CategoriaDTO>> listar (){
+    public ResponseEntity<List<CategoriaDto>> listar (){
         List<Categoria> lista = categoriaService.listarTudo();
-        List<CategoriaDTO> listaDTO = lista.stream()
-             .map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+        List<CategoriaDto> listaDTO = lista.stream()
+             .map(obj -> new CategoriaDto(obj)).collect(Collectors.toList());
         return ResponseEntity.ok().body(listaDTO);
          // return categoriaRepository.findByNome("maria soares");
          // return categoriaRepository.findByNomeContaining("taques");
     }
 
     @GetMapping ("/page")
-    public ResponseEntity<Page<CategoriaDTO>> listarPagina (
+    public ResponseEntity<Page<CategoriaDto>> listarPagina (
              @RequestParam(value = "pagina", defaultValue = "0")   Integer pagina, 
              @RequestParam(value = "linhasPorPagina", defaultValue = "24")   Integer linhasPorPagina, 
              @RequestParam(value = "ordenadoPor", defaultValue = "nome") String ordenadoPor, 
              @RequestParam(value = "direcao", defaultValue = "ASC") String direcao ){ //ASC OU DESC
         Page<Categoria> lista = categoriaService.montaPagina(pagina, linhasPorPagina, ordenadoPor, direcao);
-        Page<CategoriaDTO> listaDTO = lista.map(obj -> new CategoriaDTO(obj));
+        Page<CategoriaDto> listaDTO = lista.map(obj -> new CategoriaDto(obj));
         return ResponseEntity.ok().body(listaDTO);
          // return categoriaRepository.findByNome("maria soares");
          // return categoriaRepository.findByNomeContaining("taques");
@@ -74,7 +74,8 @@ public class CategoriaController {
     }
   //  vincular o parãmetro do método ao corpo da requisição (vide postman)
     @PostMapping
-    public ResponseEntity<Void> adicionar (@Valid @RequestBody Categoria obj){
+    public ResponseEntity<Void> adicionar (@Valid @RequestBody CategoriaDto objDto){
+        Categoria obj = categoriaService.fromDto(objDto);
         obj = categoriaService.salvar(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -84,7 +85,8 @@ public class CategoriaController {
 
     @PutMapping("/{categoriaId}")
     public ResponseEntity<Void> atualizar ( @PathVariable Long categoriaId, 
-                 @Valid @RequestBody Categoria obj){
+                 @Valid @RequestBody CategoriaDto objDto){
+                    Categoria obj = categoriaService.fromDto(objDto);
                     obj.setId(categoriaId);
                     obj = categoriaService.atualizar(obj);
             return ResponseEntity.noContent().build();// return ResponseEntity.ok(obj);
