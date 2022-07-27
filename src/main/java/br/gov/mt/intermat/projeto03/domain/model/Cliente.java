@@ -15,9 +15,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Null;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import br.gov.mt.intermat.projeto03.domain.enums.TipoCliente;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,7 +37,7 @@ public class Cliente implements Serializable {
     private String email;
     private String cpfoucnpj;
     @Column(name="tipocliente")
-    private int tipoClienteInt;
+    private Integer tipoClienteInt;
     //private TipoCliente tipoCliente;
 
     @OneToMany(mappedBy = "cliente")
@@ -62,16 +62,17 @@ public class Cliente implements Serializable {
 
      
 
-    public Cliente(Long id, String nome, String email, String cpfoucnpj, TipoCliente tipoCliente){
+    public Cliente(Long id, String nome, String email, String cpfoucnpj, 
+                   TipoCliente tipoCliente){
           this.id = id;
           this.nome = nome;
           this.email = email;
           this.cpfoucnpj = cpfoucnpj;
-          this.tipoClienteInt = tipoCliente.getCodigo();
+          this.tipoClienteInt = (tipoCliente == null) ? null : tipoCliente.getCodigo();
       }
+
       
     public Cliente() {
-
     }
 
 }

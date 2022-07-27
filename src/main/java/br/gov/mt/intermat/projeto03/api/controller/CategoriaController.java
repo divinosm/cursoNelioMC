@@ -23,21 +23,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.gov.mt.intermat.projeto03.domain.dto.CategoriaDto;
 import br.gov.mt.intermat.projeto03.domain.model.Categoria;
 import br.gov.mt.intermat.projeto03.domain.service.CategoriaService;
-import lombok.AllArgsConstructor;
 
-// cria os construtures automaticamente - allargsconstructor
-@AllArgsConstructor
+
 @RestController
 @RequestMapping("/categorias") //desta forma não necessito repetir no codigo
 public class CategoriaController {
 
-    /*
-    public CategoriaController(CategoriaRepository categoriaRepository) {
-        super();
-        this.categoriaRepository = categoriaRepository;
-    }
-    O construtor abaixo será criado com a anotação @allargsconstructor acima
-**/
+
     @Autowired
     private CategoriaService categoriaService; 
 
