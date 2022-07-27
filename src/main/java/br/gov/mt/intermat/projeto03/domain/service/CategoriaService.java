@@ -32,10 +32,11 @@ public class CategoriaService{
     public Categoria salvar(Categoria obj){
         return categoriaRepository.save(obj);
     }
-
+    
     public Categoria atualizar(Categoria obj){
-        buscar(obj.getId());
-        return categoriaRepository.save(obj);
+        Categoria newObj = buscar(obj.getId());
+        atualizaDados (newObj,obj);
+        return categoriaRepository.save(newObj);
     }
 
     public void excluir (Long categoriaId){
@@ -63,4 +64,9 @@ public class CategoriaService{
     public Categoria fromDto(CategoriaDto objDto){
             return new Categoria(objDto.getId(), objDto.getNome());
         }
+
+    private void atualizaDados (Categoria newObj, Categoria obj){
+        // vou inserir aqui apenas os atributos que poderão ser alterados
+        newObj.setNome(obj.getNome());
+    }
 }
