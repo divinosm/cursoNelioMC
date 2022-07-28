@@ -30,6 +30,7 @@ public class CategoriaService{
     }    
     
     public Categoria salvar(Categoria obj){
+        obj.setId(null);
         return categoriaRepository.save(obj);
     }
     

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.gov.mt.intermat.projeto03.domain.dto.ClienteDto;
+import br.gov.mt.intermat.projeto03.domain.dto.ClienteNewDto;
 import br.gov.mt.intermat.projeto03.domain.model.Cliente;
 import br.gov.mt.intermat.projeto03.domain.service.ClienteService;
 
@@ -64,7 +65,7 @@ public class ClienteController {
     }
   //  vincular o parãmetro do método ao corpo da requisição (vide postman)
     @PostMapping
-    public ResponseEntity<Void> adicionar (@Valid @RequestBody ClienteDto objDto){
+    public ResponseEntity<Void> adicionar (@Valid @RequestBody ClienteNewDto objDto){
         Cliente obj = clienteService.fromDto(objDto);
         obj = clienteService.salvar(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()

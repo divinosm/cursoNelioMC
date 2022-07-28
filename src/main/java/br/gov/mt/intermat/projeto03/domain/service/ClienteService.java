@@ -7,9 +7,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import br.gov.mt.intermat.projeto03.domain.dto.ClienteDto;
+import br.gov.mt.intermat.projeto03.domain.dto.ClienteNewDto;
+import br.gov.mt.intermat.projeto03.domain.enums.TipoCliente;
+import br.gov.mt.intermat.projeto03.domain.model.Cidade;
 import br.gov.mt.intermat.projeto03.domain.model.Cliente;
+import br.gov.mt.intermat.projeto03.domain.model.Endereco;
 import br.gov.mt.intermat.projeto03.domain.repository.ClienteRepository;
+import br.gov.mt.intermat.projeto03.domain.repository.EnderecoRepository;
 import br.gov.mt.intermat.projeto03.domain.service.exceptions.DataIntegrityException;
 import br.gov.mt.intermat.projeto03.domain.service.exceptions.ObjetcNotFoundException;
 import lombok.AllArgsConstructor;
@@ -20,14 +27,22 @@ public class ClienteService{
 
     @Autowired
     private ClienteRepository clienteRepository;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
     
     public Cliente buscar (long clienteId){
         Optional <Cliente> obj = clienteRepository.findById(clienteId);
         return obj.orElseThrow(() -> new ObjetcNotFoundException("Objeto não encontrado! Id: " + clienteId + ", Tipo: " + Cliente.class.getName()));
     }    
-    
+    // como a cliente tem varios relacionamentos
+    // para assegurar integridade, usar @transaction
+    //
+    @Transactional
     public Cliente salvar(Cliente obj){
-        return clienteRepository.save(obj);
+        obj.setId(null);
+        obj = clienteRepository.save(obj);
+        enderecoRepository.saveAll(obj.getEnderecos());
+        return obj;
     }
     //
     // recebo como entrada os dados que devo atualizar, acesso o banco de dados (newObj)
@@ -63,6 +78,25 @@ public class ClienteService{
     public Cliente fromDto(ClienteDto objDto){
         // vou me basear no construtor da classe e não dto
            return new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(),null,null);
+        }
+
+    public Cliente fromDto(ClienteNewDto objDto){
+            Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), 
+                              objDto.getCpfoucnpj(), TipoCliente.toEnum(objDto.getTipoClienteInt()));
+            Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
+            Endereco end = new Endereco(null, objDto.getLogradouro(),
+                              objDto.getNumero(), objDto.getComplemento(),
+                              objDto.getBairro(), objDto.getCep(),
+                              cli,  cid);
+            cli.getEnderecos().add(end);
+            cli.getTelefones().add(objDto.getTelefone1());
+            if (objDto.getTelefone2()!=null) {
+                cli.getTelefones().add(objDto.getTelefone2());
+            }
+            if (objDto.getTelefone3()!=null) {
+                cli.getTelefones().add(objDto.getTelefone3());
+            }
+            return cli;
         }
 
     private void atualizaDados (Cliente newObj, Cliente obj){
