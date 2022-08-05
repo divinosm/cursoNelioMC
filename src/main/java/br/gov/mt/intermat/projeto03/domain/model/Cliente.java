@@ -33,6 +33,7 @@ public class Cliente implements Serializable {
     private Long id;
     @Column(nullable = false)
     private String nome;
+    @Column(unique = true)
     private String email;
     private String cpfoucnpj;
     @Column(name="tipocliente")
