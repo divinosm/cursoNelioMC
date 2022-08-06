@@ -3,7 +3,7 @@ package br.gov.mt.intermat.projeto03.api.controller;
 import java.util.List;
 import javax.validation.Valid;
 
-// import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gov.mt.intermat.projeto03.api.controller.utils.Url;
+import br.gov.mt.intermat.projeto03.domain.dto.ProdutoDto;
 import br.gov.mt.intermat.projeto03.domain.model.Produto;
 import br.gov.mt.intermat.projeto03.domain.repository.ProdutoRepository;
 import br.gov.mt.intermat.projeto03.domain.service.ProdutoService;
@@ -48,6 +51,24 @@ public class ProdutoController {
         return  produtoService.listarTudo();
          // return produtoRepository.findByNome("maria soares");
           // return produtoRepository.findByNomeContaining("taques");
+    }
+
+    @GetMapping ("/page")
+    public ResponseEntity<Page<ProdutoDto>> listarPagina (
+             @RequestParam(value="nome", defaultValue="") String nome, 
+             @RequestParam(value="categorias", defaultValue="") String categorias, 
+             @RequestParam(value = "pagina", defaultValue = "0")   Integer pagina, 
+             @RequestParam(value = "linhasPorPagina", defaultValue = "24")   Integer linhasPorPagina, 
+             @RequestParam(value = "ordenadoPor", defaultValue = "nome") String ordenadoPor, 
+             @RequestParam(value = "direcao", defaultValue = "ASC") String direcao ){ //ASC OU DESC
+        String nomeDecoded = Url.decodeParam(nome);
+        List<Long> categoriaIds = Url.decodeLongList(categorias);
+        Page<Produto> lista = produtoService.findDistinctByNomeContainingAndCategoriasIn(nomeDecoded,categoriaIds,pagina, linhasPorPagina, ordenadoPor, direcao);
+        
+        Page<ProdutoDto> listaDTO = lista.map(obj -> new ProdutoDto(obj));
+        return ResponseEntity.ok().body(listaDTO);
+         // return categoriaRepository.findByNome("maria soares");
+         // return categoriaRepository.findByNomeContaining("taques");
     }
 
     @GetMapping("/{produtoId}")
