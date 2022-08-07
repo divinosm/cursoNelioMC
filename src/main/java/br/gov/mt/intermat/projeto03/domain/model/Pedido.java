@@ -50,7 +50,13 @@ public class Pedido implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.pedido")
     private Set<ItemPedido> itens = new HashSet<>();
 
-
+    public Double getValorTotal(){
+        double soma = 0;
+        for (ItemPedido ip : itens){
+            soma = soma + ip.getSubTotal();
+        }
+        return soma;
+    }
     public Pedido(Long id, Date instante,  
                   Cliente cliente, Endereco enderecoEntrega) {
         this.id = id;

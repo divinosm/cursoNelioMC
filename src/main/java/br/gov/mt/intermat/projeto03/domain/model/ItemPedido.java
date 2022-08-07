@@ -25,6 +25,14 @@ public class ItemPedido implements Serializable {
     private Double desconto;
     private Integer quantidade;
     private Double preço;
+    // quando coloco o get na frente, o mesmo será
+    // reconhecido pelo JSON e serializado. Vai aparecer
+    // no corpo do postman.
+    public Double getSubTotal(){
+        return ((preço - desconto)*quantidade);
+    }
+
+
     //@JsonIgnore
     //@JsonManagedReference // no lado que vc quer que venham os objetos referenciados
 
