@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import br.gov.mt.intermat.projeto03.domain.enums.EstadoPagamento;
 import lombok.Data;
@@ -14,6 +15,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @EqualsAndHashCode(callSuper=false)
 @Table (name = "pagamentoBoleto")
+@JsonTypeName("pagamentoBoleto")
 public class PagamentoBoleto extends Pagamento   {
     private static final long serialVersionUID = 1L;
     @JsonFormat(pattern = "dd/MM/yyyy")

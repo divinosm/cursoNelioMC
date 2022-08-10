@@ -1,20 +1,44 @@
 package br.gov.mt.intermat.projeto03.domain.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.gov.mt.intermat.projeto03.domain.enums.EstadoPagamento;
+import br.gov.mt.intermat.projeto03.domain.model.ItemPedido;
+import br.gov.mt.intermat.projeto03.domain.model.PagamentoBoleto;
 import br.gov.mt.intermat.projeto03.domain.model.Pedido;
+import br.gov.mt.intermat.projeto03.domain.repository.ItemPedidoRepository;
+import br.gov.mt.intermat.projeto03.domain.repository.PagamentoRepository;
 import br.gov.mt.intermat.projeto03.domain.repository.PedidoRepository;
+import br.gov.mt.intermat.projeto03.domain.repository.ProdutoRepository;
 import br.gov.mt.intermat.projeto03.domain.service.exceptions.ObjetcNotFoundException;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class PedidoService{
+    @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
+    @Autowired
+	private BoletoService boletoService;
+
+    @Autowired
+	private ItemPedidoRepository itemPedidoRepository;
+
+	@Autowired
+	private ProdutoService produtoService;
+
+    @Autowired
+	private PagamentoRepository pagamentoRepository;
     
     public Pedido buscar (long pedidoId){
         Optional <Pedido> pedido = pedidoRepository.findById(pedidoId);
@@ -29,16 +53,24 @@ public class PedidoService{
   }
 
     @Transactional
-    public Pedido salvar(Pedido pedido){
-        // boolean nomeExiste = pedidoRepository
-        //                       .findByNome(pedido.getNome())
-        //                       .stream()
-        //                       .anyMatch(pedidoExistente -> !pedidoExistente.equals(pedido));
-        // if (nomeExiste) {
-        //     throw new ObjetcNotFoundException("jah existe um pedido cadastrado com este nome! nome: " + pedido.getNome() + ", Tipo: " + Pedido.class.getName());
-        // }                 
-
-        return pedidoRepository.save(pedido);
+    public Pedido salvar(Pedido obj){
+        obj.setId(null);
+		obj.setInstante(new Date());
+		obj.getPagamento().setEstadoPagamento(EstadoPagamento.PENDENTE);
+		obj.getPagamento().setPedido(obj);
+		if (obj.getPagamento() instanceof PagamentoBoleto) {
+			PagamentoBoleto pagto = (PagamentoBoleto) obj.getPagamento();
+			boletoService.preencherPagamentoBoleto(pagto, obj.getInstante());
+		}
+		obj = pedidoRepository.save(obj);
+		pagamentoRepository.save(obj.getPagamento());
+		for (ItemPedido ip : obj.getItens()) {
+			ip.setDesconto(0.0);
+			ip.setPreco(produtoService.buscar(ip.getProduto().getId()).getPreco());
+			ip.setPedido(obj);
+		}
+		itemPedidoRepository.saveAll(obj.getItens());
+		return obj;           
     }
 
     @Transactional

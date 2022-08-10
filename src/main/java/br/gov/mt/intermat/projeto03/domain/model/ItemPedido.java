@@ -24,12 +24,12 @@ public class ItemPedido implements Serializable {
     
     private Double desconto;
     private Integer quantidade;
-    private Double preço;
+    private Double preco;
     // quando coloco o get na frente, o mesmo será
     // reconhecido pelo JSON e serializado. Vai aparecer
     // no corpo do postman.
     public Double getSubTotal(){
-        return ((preço - desconto)*quantidade);
+        return ((preco - desconto)*quantidade);
     }
 
 
@@ -42,16 +42,24 @@ public class ItemPedido implements Serializable {
     public Pedido getPedido(){
         return id.getPedido();
     }
+
+    public void setPedido(Pedido pedido) {
+		id.setPedido(pedido);
+	}
+
     public Produto getProduto(){
         return id.getProduto();
     }
+    public void setProduto(Produto produto) {
+		id.setProduto(produto);
+	}
     
-    public ItemPedido(Pedido pedido, Produto produto, Double desconto, Integer quantidade, Double preço) {
+    public ItemPedido(Pedido pedido, Produto produto, Double desconto, Integer quantidade, Double preco) {
         id.setPedido(pedido);
         id.setProduto(produto);
         this.desconto = desconto;
         this.quantidade = quantidade;
-        this.preço = preço;
+        this.preco = preco;
     } 
     public ItemPedido() {
     } 

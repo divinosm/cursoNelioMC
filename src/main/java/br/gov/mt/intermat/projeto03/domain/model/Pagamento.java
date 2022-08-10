@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import br.gov.mt.intermat.projeto03.domain.enums.EstadoPagamento;
 import lombok.Data;
@@ -28,6 +29,8 @@ import lombok.EqualsAndHashCode;
 //abstract, não consigo instanciar. Se quiser devo 
 //instanciar uma subclasse
 //
+// a classe pagamento vai ter um campo adicional chamado type
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public abstract class Pagamento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
