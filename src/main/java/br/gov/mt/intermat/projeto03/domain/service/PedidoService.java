@@ -15,7 +15,6 @@ import br.gov.mt.intermat.projeto03.domain.model.Pedido;
 import br.gov.mt.intermat.projeto03.domain.repository.ItemPedidoRepository;
 import br.gov.mt.intermat.projeto03.domain.repository.PagamentoRepository;
 import br.gov.mt.intermat.projeto03.domain.repository.PedidoRepository;
-import br.gov.mt.intermat.projeto03.domain.repository.ProdutoRepository;
 import br.gov.mt.intermat.projeto03.domain.service.exceptions.ObjetcNotFoundException;
 import lombok.AllArgsConstructor;
 
@@ -24,9 +23,6 @@ import lombok.AllArgsConstructor;
 public class PedidoService{
     @Autowired
     private PedidoRepository pedidoRepository;
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
 
     @Autowired
 	private BoletoService boletoService;
