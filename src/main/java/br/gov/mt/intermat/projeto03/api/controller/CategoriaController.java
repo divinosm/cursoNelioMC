@@ -24,7 +24,6 @@ import br.gov.mt.intermat.projeto03.domain.dto.CategoriaDto;
 import br.gov.mt.intermat.projeto03.domain.model.Categoria;
 import br.gov.mt.intermat.projeto03.domain.service.CategoriaService;
 
-
 @RestController
 @RequestMapping("/categorias") //desta forma não necessito repetir no codigo
 public class CategoriaController {
