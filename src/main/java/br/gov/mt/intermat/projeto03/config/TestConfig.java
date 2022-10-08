@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import br.gov.mt.intermat.projeto03.domain.service.DbService;
+import br.gov.mt.intermat.projeto03.domain.service.EmailService;
+import br.gov.mt.intermat.projeto03.domain.service.MockEmailService;
 
 @Configuration
 @Profile("test")
@@ -21,4 +23,8 @@ public class TestConfig {
         dbService.instatiateTestDatabase();
         return true;
     }
+    @Bean
+	public EmailService emailService() {
+		return new MockEmailService();
+	}
 }
