@@ -1,0 +1,19 @@
+postgres://dmtunfdaanyodf:849db8061631b586abaf01d32705900c619949253052a597da5aea3384ff7c0c@ec2-3-229-165-146.compute-1.amazonaws.com:5432/dke9lf2k16eha
+
+postgres:// (username)
+dmtunfdaanyodf
+:
+849db8061631b586abaf01d32705900c619949253052a597da5aea3384ff7c0c
+
+@ (hostname/address)
+ec2-3-229-165-146.compute-1.amazonaws.com
+
+: (port)
+5432
+
+/ (maintenance database)
+dke9lf2k16eha
+
+no advanced
+db restriction redete 
+dke9lf2k16eha
